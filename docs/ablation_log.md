@@ -32,3 +32,11 @@
    Rows with `date > date_unregistration` are dropped - a withdrawn
    student's post-withdrawal weeks (naturally all-zero) are excluded
    from training data to avoid a trivial shortcut signal.   
+
+## Post-build validation findings
+- 45.0% of all (student, week) matrices are uniform (sparse/inactive week).
+- Uniform rate differs by label: 51.5% for withdrawn students vs 44.4%
+  for non-withdrawn — a real behavioral signal, not a bug.
+- Label rate per week declines from 21.6% (week 0) to ~0% (week 35+),
+  a survivorship artifact of post-withdrawal truncation (Decision #5).
+  This must be reported per-week, not as a single pooled accuracy number.
