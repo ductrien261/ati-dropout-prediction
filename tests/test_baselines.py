@@ -5,6 +5,7 @@ from src.ati.transforms.mtf import build_mtf_image
 from src.ati.transforms.heatmap import build_heatmap_image
 from src.ati.transforms.radar import build_radar_image
 from src.ati.transforms.common import N_ACTIVITIES
+from src.ati.transforms.raw_features import build_raw_features
 
 
 def make_vec(active_idx, click, n=N_ACTIVITIES):
@@ -56,3 +57,13 @@ def test_radar_shape_and_range():
     assert img.shape == (64, 64)
     assert 0.0 <= img.min() and img.max() <= 1.0
     assert img.sum() > 0 
+
+def test_raw_features_shape():
+    vec = build_raw_features(make_dense_week())
+    assert vec.shape == (N_ACTIVITIES,)
+    assert vec.sum() > 0
+
+def test_raw_features_empty_week():
+    vec = build_raw_features({})
+    assert vec.shape == (N_ACTIVITIES,)
+    assert vec.sum() == 0
