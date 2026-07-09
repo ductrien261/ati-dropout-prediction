@@ -39,4 +39,16 @@
   for non-withdrawn — a real behavioral signal, not a bug.
 - Label rate per week declines from 21.6% (week 0) to ~0% (week 35+),
   a survivorship artifact of post-withdrawal truncation (Decision #5).
-  This must be reported per-week, not as a single pooled accuracy number.
+  This must be reported per-week, not as a single pooled accuracy number.\
+
+## Baseline representation decisions
+- GAF/RP/MTF operate per-activity on the 7-day within-week click sequence
+  (20 channels of length-7 series), analogous to ATI-v1's 20-activity
+  structure, using the pyts library.
+- MTF uses n_bins=4, strategy="uniform" (not the pyts default "quantile")
+  because click sequences contain many tied/zero values that break
+  quantile binning.
+- Heatmap and Radar are implemented WITHOUT matplotlib for performance:
+  matplotlib rendering at ~577k samples would be prohibitively slow.
+  Heatmap: 20-dim weekly click vector reshaped into a fixed 4x5 grid.
+  Radar: 20-vertex polygon rasterized via PIL.ImageDraw onto a 64x64 canvas.
